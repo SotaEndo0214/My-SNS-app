@@ -38,7 +38,6 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'bootstrap4',
 ]
 
 MIDDLEWARE = [
@@ -67,7 +66,6 @@ TEMPLATES = [
                 'django.template.context_processors.media',
             ],
             'builtins':[
-                'bootstrap4.templatetags.bootstrap4',
             ],
         },
     },

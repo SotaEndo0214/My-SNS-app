@@ -1,7 +1,7 @@
-*.pyc
-*~
-/.vscode
-__pycache__
-myvenv
+project/__pycache__/
+sns/__pycache__/
+sns/migrations/
+media/
+project/config/
+venv/
 db.sqlite3
-.DS_Store

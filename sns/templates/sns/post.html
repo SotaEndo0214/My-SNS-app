@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+{% extends 'base.html' %}
+
+<meta http-equiv="content-type" charset="utf-8">
+<html lang="ja">
+  {% block body %}
+  <br><br><br>
+    <form enctype="multipart/form-data" method="POST" action="{% url 'sns:post' %}" >
+      {% csrf_token %}
+      <label>メッセージ:</label>
+      {{ form.context }}
+      {{ form.context.errors }}
+      <label>画像:</label>
+      {{ form.image }}
+      {{ form.image.errors }}
+      <input type="submit" value="投稿する"><input type="reset" value="リセット">
+    </form>
+    <a href="{% url 'sns:timeline' %}">タイムラインに戻る</a>
+  {% endblock %}
+</html>

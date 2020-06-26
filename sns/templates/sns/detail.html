@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+{% extends 'base.html' %}
+
+<html lang="ja">
+  {% block body %}
+      <div class="basic">
+                <div class="row">
+                    <div class="col-3" id="sticky-sidebar">
+                        <div class="sticky-top">
+                            <br><br>
+                            <nav class="navbar navbar-dark bg-dark">
+                                <ul class="navbar-nav">
+                                    <li class="nav-item">
+                                        <a class="nav-link" href="{% url 'sns:post' %}">投稿する</a>
+                                    </li>
+                                </ul>
+                            </nav>
+
+                            {% if message.user.id == visit_user.id %}
+                              <nav class="navbar navbar-dark bg-dark">
+                                  <ul class="navbar-nav">
+                                      <li class="nav-item">
+                                        <a class="nav-link" href="{% url 'sns:delete_confirm' message.user.id message.id %}">削除する</a>
+                                      </li>
+                                  </ul>
+                              </nav>
+                            {% endif %}
+
+                            <nav class="navbar navbar-dark bg-dark">
+                                <ul class="navbar-nav">
+                                    <li class="nav-item">
+                                        <a class="nav-link" href="{% url 'sns:reply' message.user.id message.id %}">返信する</a>
+                                    </li>
+                                </ul>
+                            </nav>
+
+                            <nav class="navbar navbar-dark bg-dark">
+                                <ul class="navbar-nav">
+                                    <li class="nav-item">
+                                        <a class="nav-link" href="{% url 'sns:userpage' user.id %}">マイページへ</a>
+                                    </li>
+                                </ul>
+                            </nav>
+
+                            <nav class="navbar navbar-dark bg-dark">
+                                <ul class="navbar-nav">
+                                    <li class="nav-item">
+                                        <a class="nav-link" href="{% url 'sns:timeline' %}">タイムラインへ</a>
+                                    </li>
+                                </ul>
+                            </nav>
+
+                            <nav class="navbar navbar-dark bg-dark">
+                                <ul class="navbar-nav">
+                                    <li class="nav-item">
+                                        <a class="nav-link" href="{% url 'sns:logout' %}">ログアウトする</a>
+                                    </li>
+                                </ul>
+                            </nav>
+                        </div>
+                    </div>
+
+                <div class="col-9">
+                    <br><br>
+                    {% if message.parent %}
+                        <div class="card">
+                          <div class="card-body">
+                            <p class="card-text"><img src='{{ MEDIA_URL }}{{ message.parent.user.icon_image }}' width=30 height=30>
+                                <a href="{% url 'sns:userpage' message.parent.user.id %}">{{ message.parent.user.username }}</a><br>
+                                <a href="{% url 'sns:detail' message.parent.user.id message.parent.id %}">{{ message.parent.context | linebreaksbr }}</a>
+                            </p>
+                          </div>
+                          {% if message.parent.image %}
+                            <img src='{{ MEDIA_URL }}{{ message.parent.image }}' width=100>
+                          {% endif %}
+                          <div class="card-body">
+                            <p class="card-text">
+                              <form method=POST action="{% url 'sns:good' message.parent.user.id message.parent.id %}">
+                                        <input type="hidden" name="next" value="{{ request.path }}">
+                                        <button type="SUBMIT">いいね</button>:{{ message.parent.good }}
+                                        {% csrf_token %}
+                                       </form> 投稿日時:{{ message.parent.pub_date }}</p>
+                          </div>
+                        </div>
+                    {% endif %}
+
+                    <font size="+2">
+                        <div class="card">
+                          <div class="card-body">
+                            <p class="card-text"><img src='{{ MEDIA_URL }}{{ message.user.icon_image }}' width=30 height=30>
+                                <a href="{% url 'sns:userpage' message.user.id %}">{{ message.user.username }}</a><br>
+                                <p>{{ message.context | linebreaksbr }}</p>
+                            </p>
+                          </div>
+                          {% if message.image %}
+                            <img src='{{ MEDIA_URL }}{{ message.image }}' width=200>
+                          {% endif %}
+                          <div class="card-body">
+                            <p class="card-text"><form method=POST action="{% url 'sns:good' message.user.id message.id %}">
+                            <input type="hidden" name="next" value="{{ request.path }}">
+                            <button type="SUBMIT">いいね</button>:{{ message.good }}
+                            {% csrf_token %}
+                           </form>
+                            投稿日時:{{ message.pub_date }}</p>
+                          </div>
+                        </div>
+                    </font>
+
+                    {% if children_message_list %}
+                        {%for children in children_message_list%}
+                            <div class="card">
+                                  <div class="card-body">
+                                    <p class="card-text"><img src='{{ MEDIA_URL }}{{ children.user.icon_image }}' width=30 height=30>
+                                        <a href="{% url 'sns:userpage' children.user.id %}">{{ children.user.username }}</a><br>
+                                        <a href="{% url 'sns:detail' children.user.id children.id %}">{{ children.context | linebreaksbr }}</a>
+                                    </p>
+                                  </div>
+                                  {% if children.image %}
+                                    <img src='{{ MEDIA_URL }}{{ children.image }}' width=100>
+                                  {% endif %}
+                                  <div class="card-body">
+                                    <p class="card-text"><form method=POST action="{% url 'sns:good' children.user.id message.id %}">
+                                    <input type="hidden" name="next" value="{{ request.path }}">
+                                    <button type="SUBMIT">いいね</button>:{{ children.good }}
+                                    {% csrf_token %}
+                                   </form>
+                                    投稿日時:{{ children.pub_date }}</p>
+                                  </div>
+                                </div>
+                        {% endfor %}
+                    {% endif %}
+                </div>
+            </div>
+      </div>
+  {% endblock %}
+</html>

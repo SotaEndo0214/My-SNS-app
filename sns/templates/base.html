@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+{% load static %}
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>{% block title %}{% endblock %}</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" type="text/css" href="{% static 'sns/css/bootstrap.css' %}" />
+    {% block css %}{% endblock %}
+    {% block js %}{% endblock %}
+</head>
+<body>
+    <div class="fixed-top">
+        <nav class="navbar navbar-dark navbar-fixed-top bg-dark">
+            <ul class="navbar-nav">
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'sns:timeline' %}">輪講SNS</a>
+                </li>
+                {% block nav_item %}{% endblock %}
+            </ul>
+        </nav>
+    </div>
+
+        <div class="container-fluid">
+            {% block jumbotron %}{% endblock %}
+            {% block body %}
+            {% endblock %}
+        </div>
+</body>
+</html>

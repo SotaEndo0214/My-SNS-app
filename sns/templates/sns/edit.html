@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+{% extends 'base.html' %}
+
+<html lang="ja">
+  {% block body %}
+  <br><br><br>
+    <form enctype="multipart/form-data"　role="form" method="post">
+      {% csrf_token %}
+      <h3>プロフィール変更</h3>
+      <div>
+        <label>ユーザー名: {{ user.username }}</label>
+        <br>
+        {{ form.username }}
+        {{ form.username.errors }}
+      </div>
+      <div>
+        <label>メールアドレス: {{ user.email }}</label>
+        <br>
+        {{ form.email }}
+        {{ form.email.errors }}
+      </div>
+      <div>
+        <label>アイコン: <img src='{{ MEDIA_URL }}{{ user.icon_image }}' width=20></label>
+        <br>
+        {{ form.icon_image }}
+        {{ form.icon_image.errors }}
+      </div>
+      <div>
+        <label>バイオグラフィ: {{ user.biography }}</label>
+        <br>
+        {{ form.biography }}
+        {{ form.biography.errors }}
+      </div>
+      <div>
+        <button class="btn btn-primary" type="submit">変更</button><a href="{% url 'sns:userpage' user.id %}">戻る</a>
+      </div>
+    </form>
+  {% endblock %}
+</html>

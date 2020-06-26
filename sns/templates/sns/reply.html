@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+{% extends 'base.html' %}
+
+<meta http-equiv="content-type" charset="utf-8">
+<html lang="ja">
+  {% block body %}
+  <br><br>
+      <div class="card">
+        <div class="card-body">
+          <p class="card-text"><img src='{{ MEDIA_URL }}{{ message.user.icon_image }}' width=30 height=30>
+              <a href="{% url 'sns:userpage' message.user.id %}">{{ message.user.username }}</a><br>
+              <a href="{% url 'sns:detail' message.user.id message.id %}">{{ message.context | linebreaksbr }}</a>
+          </p>
+        </div>
+        {% if message.image %}
+          <img src='{{ MEDIA_URL }}{{ message.image }}' width=100>
+        {% endif %}
+        <div class="card-body">
+          <p class="card-text"><form method=POST action="{% url 'sns:good' message.user.id message.id %}">
+          <input type="hidden" name="next" value="{{ request.path }}">
+          <button type="SUBMIT">いいね</button>:{{ message.good }}
+          {% csrf_token %}
+         </form>
+          投稿日時:{{ message.pub_date }}</p>
+        </div>
+      </div>
+    <form enctype="multipart/form-data" method="POST" action="{% url 'sns:reply' message.user.id message.id %}" >
+      {% csrf_token %}
+      <label>返信:</label>
+      {{ form.context }}
+      {{ form.context.errors }}
+      <label>画像:</label>
+      {{ form.image }}
+      {{ form.image.errors }}
+      <input type="submit" value="投稿する"><input type="reset" value="リセット">
+    </form>
+    <a href="{% url 'sns:timeline' %}">タイムラインに戻る</a>
+  {% endblock %}
+</html>

@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+{% extends 'base.html' %}
+
+<html lang="ja">
+  {% block body %}
+  <br><br>
+    {% if message.user.id == visit_user.id %}
+    <h1>この投稿を削除しますか？</h1>
+    <div class="card">
+        <div class="card-body">
+          <p class="card-text"><img src='{{ MEDIA_URL }}{{ message.user.icon_image }}' width=30 height=30>
+              <a href="{% url 'sns:userpage' message.user.id %}">{{ message.user.username }}</a><br>
+              <a href="{% url 'sns:detail' message.user.id message.id %}">{{ message.context | linebreaksbr }}</a>
+          </p>
+        </div>
+        {% if message.image %}
+          <img src='{{ MEDIA_URL }}{{ message.image }}' width=100>
+        {% endif %}
+        <div class="card-body">
+          <p class="card-text"><form method=POST action="{% url 'sns:good' message.user.id message.id %}">
+          <input type="hidden" name="next" value="{{ request.path }}">
+          <button type="SUBMIT">いいね</button>:{{ message.good }}
+          {% csrf_token %}
+         </form>
+          投稿日時:{{ message.pub_date }}</p>
+        </div>
+      </div>
+    <a href="{% url 'sns:delete' message.user.id message.id %}">削除する</a>
+    {% endif %}
+    <a href="{% url 'sns:timeline' %}">タイムラインに戻る</a>
+  {% endblock %}
+</html>

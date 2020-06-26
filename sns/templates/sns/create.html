@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+{% extends 'base.html' %}
+
+<html lang="ja">
+  {% block body %}
+  <br><br><br>
+    <form method="POST" action="{% url 'sns:create_account' %}">
+      {% csrf_token %}
+      <label>ユーザーネーム</label>
+      {{ form.username }}
+      {{ form.username.errors }}
+      <label>メールアドレス</label>
+      {{ form.email }}
+      {{ form.email.errors }}
+      <label>パスワード</label>
+      {{ form.password1 }}
+      {{ form.password1.errors }}
+      <label>パスワード(確認)</label>
+      {{ form.password2 }}
+      {{ form.password2.errors }}
+      <button type = "submit">登録</button>
+    </form>
+  {% endblock %}
+</html>

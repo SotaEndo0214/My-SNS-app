@@ -1,4 +1,5 @@
 project/__pycache__/
+project/static/
 sns/__pycache__/
 sns/migrations/
 media/
